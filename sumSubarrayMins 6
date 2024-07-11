@@ -1,0 +1,39 @@
+def sumSubarrayMins(arr):
+    MOD = 10**9 + 7
+    n = len(arr)
+    left = [-1] * n  # left[i] will store index of previous smaller element
+    right = [n] * n  # right[i] will store index of next smaller element
+    stack = []
+    
+    # Calculate left array
+    for i in range(n):
+        while stack and arr[stack[-1]] > arr[i]:
+            stack.pop()
+        left[i] = stack[-1] if stack else -1
+        stack.append(i)
+    
+    stack = []
+    # Calculate right array
+    for i in range(n-1, -1, -1):
+        while stack and arr[stack[-1]] >= arr[i]:
+            stack.pop()
+        right[i] = stack[-1] if stack else n
+        stack.append(i)
+    
+    # Calculate count[i]: number of subarrays where arr[i] is the minimum
+    count = [0] * n
+    for i in range(n):
+        left_count = i - left[i]
+        right_count = right[i] - i
+        count[i] = left_count * right_count
+    
+    # Calculate the sum of min(b) over all subarrays
+    result = 0
+    for i in range(n):
+        result = (result + arr[i] * count[i]) % MOD
+    
+    return result
+
+# Example usage:
+arr = [3, 1, 2, 4]
+print(sumSubarrayMins(arr))  # Output: 17
