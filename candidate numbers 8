@@ -1,0 +1,27 @@
+def combinationSum2(candidates, target):
+    candidates.sort()  # Sort candidates to handle duplicates and ensure non-decreasing order
+    result = []
+    
+    def backtrack(combination, start_index, current_sum):
+        if current_sum == target:
+            result.append(combination[:])  # Make a copy of current combination
+            return
+        if current_sum > target:
+            return
+        
+        for i in range(start_index, len(candidates)):
+            # Skip duplicates
+            if i > start_index and candidates[i] == candidates[i-1]:
+                continue
+            combination.append(candidates[i])
+            backtrack(combination, i + 1, current_sum + candidates[i])
+            combination.pop()
+    
+    backtrack([], 0, 0)
+    return result
+
+# Example usage:
+candidates = [10, 1, 2, 7, 6, 1, 5]
+target = 8
+print(combinationSum2(candidates, target))
+# Output: [[1, 1, 6], [1, 2, 5], [1, 7], [2, 6]]
