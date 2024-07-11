@@ -1,0 +1,32 @@
+def subsets(nums):
+    # Sort the input set to ensure lexicographical order
+    nums.sort()
+    # Result list to store subsets
+    result = []
+    
+    # Helper function to generate subsets recursively
+    def backtrack(start, subset):
+        # Add the current subset to result
+        result.append(subset[:])
+        
+        # Explore all possible subsets starting from 'start' index
+        for i in range(start, len(nums)):
+            # Avoid duplicates
+            if i > start and nums[i] == nums[i - 1]:
+                continue
+            # Include nums[i] in the subset
+            subset.append(nums[i])
+            # Recursively generate subsets
+            backtrack(i + 1, subset)
+            # Backtrack: remove nums[i] from subset
+            subset.pop()
+    
+    # Start backtrack from index 0 with an empty subset
+    backtrack(0, [])
+    
+    return result
+
+# Example usage:
+A = [1, 2, 3]
+print("Original Set:", A)
+print("Subsets:", subsets(A))
