@@ -1,0 +1,39 @@
+def has_hamiltonian_cycle(edges, n):
+    # Step 1: Build graph adjacency list
+    graph = [[] for _ in range(n)]
+    for u, v in edges:
+        graph[u].append(v)
+        graph[v].append(u)
+    
+    # Step 2: Define helper function for backtracking
+    def backtrack(path, visited):
+        if len(path) == n:
+            # Check if there's an edge from the last node to the starting node
+            if path[0] in graph[path[-1]]:
+                return True
+            else:
+                return False
+        last_node = path[-1]
+        for neighbor in graph[last_node]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                path.append(neighbor)
+                if backtrack(path, visited):
+                    return True
+                path.pop()
+                visited.remove(neighbor)
+        return False
+    
+    # Step 3: Try to find a Hamiltonian cycle starting from each vertex
+    for start in range(n):
+        visited = set()
+        visited.add(start)
+        if backtrack([start], visited):
+            return True
+    
+    return False
+
+# Example usage:
+edges = [(0, 1), (1, 2), (2, 3), (3, 0), (0, 2)]
+n = 4
+print(has_hamiltonian_cycle(edges, n))  # Output: True
