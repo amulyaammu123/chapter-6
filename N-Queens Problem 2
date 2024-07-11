@@ -1,0 +1,54 @@
+def solve_n_queens_generalized(n_rows, n_cols, obstacles=None, restrictions=None):
+    def is_safe(board, row, col):
+        # Check column threats
+        for i in range(row):
+            if board[i][col] == 'Q':
+                return False
+        
+        # Check diagonal threats
+        for i, j in zip(range(row-1, -1, -1), range(col-1, -1, -1)):
+            if board[i][j] == 'Q':
+                return False
+        for i, j in zip(range(row-1, -1, -1), range(col+1, n_cols)):
+            if board[i][j] == 'Q':
+                return False
+        
+        # Check obstacles
+        if obstacles and (row, col) in obstacles:
+            return False
+        
+        # Check restrictions
+        if restrictions and row == 0:
+            if col in restrictions:
+                return False
+        
+        return True
+    
+    def backtrack(board, row):
+        if row == n_rows:
+            solutions.append([col + 1 for col in board[0]])
+            return
+        
+        for col in range(n_cols):
+            if is_safe(board, row, col):
+                board[row][col] = 'Q'
+                backtrack(board, row + 1)
+                board[row][col] = '.'
+    
+    # Initialize board
+    board = [['.' for _ in range(n_cols)] for _ in range(n_rows)]
+    solutions = []
+    backtrack(board, 0)
+    return solutions
+
+# Example usage:
+print("8×10 Board Example:")
+solutions_8x10 = solve_n_queens_generalized(8, 10)
+for i, solution in enumerate(solutions_8x10):
+    print(f"Solution {i + 1}: {solution}")
+
+print("\n5×5 Board with Obstacles Example:")
+obstacles = [(2, 2), (4, 4)]
+solutions_5x5_obstacles = solve_n_queens_generalized(5, 5, obstacles=obstacles)
+for i, solution in enumerate(solutions_5x5_obstacles):
+    print(f"Solution {i + 1}: {solution}")
