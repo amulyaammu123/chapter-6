@@ -1,0 +1,30 @@
+from collections import defaultdict
+
+def findTargetSumWays(nums, target):
+    memo = defaultdict(int)
+    
+    def dp(index, current_sum):
+        if index == len(nums):
+            return 1 if current_sum == target else 0
+        
+        if (index, current_sum) in memo:
+            return memo[(index, current_sum)]
+        
+        # Calculate ways by either adding or subtracting nums[index]
+        add_ways = dp(index + 1, current_sum + nums[index])
+        subtract_ways = dp(index + 1, current_sum - nums[index])
+        
+        # Store the result in memoization dictionary
+        memo[(index, current_sum)] = add_ways + subtract_ways
+        return memo[(index, current_sum)]
+    
+    return dp(0, 0)
+
+# Example usage:
+nums1 = [1, 1, 1, 1, 1]
+target1 = 3
+print(findTargetSumWays(nums1, target1))  # Output: 5
+
+nums2 = [1]
+target2 = 1
+print(findTargetSumWays(nums2, target2))  # Output: 1
