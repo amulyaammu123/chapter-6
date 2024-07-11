@@ -1,0 +1,31 @@
+def subsets_with_element(nums, x):
+    # Sort the input set to ensure subsets are generated in lexicographical order
+    nums.sort()
+    # Result list to store subsets containing element x
+    result = []
+    
+    # Helper function to generate subsets recursively
+    def backtrack(start, subset):
+        # Add the current subset to result if it contains element x
+        if x in subset:
+            result.append(subset[:])
+        
+        # Explore all possible subsets starting from 'start' index
+        for i in range(start, len(nums)):
+            # Include nums[i] in the subset
+            subset.append(nums[i])
+            # Recursively generate subsets
+            backtrack(i + 1, subset)
+            # Backtrack: remove nums[i] from subset
+            subset.pop()
+    
+    # Start backtrack from index 0 with an empty subset
+    backtrack(0, [])
+    
+    return result
+
+# Example usage:
+nums = [2, 3, 4, 5]
+x = 3
+print("Original Set:", nums)
+print("Subsets containing", x, ":", subsets_with_element(nums, x))
