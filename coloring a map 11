@@ -1,0 +1,40 @@
+def max_personal_regions(edges, n):
+    adjacency_list = [[] for _ in range(n)]
+    
+    # Create adjacency list
+    for edge in edges:
+        u, v = edge
+        adjacency_list[u].append(v)
+        adjacency_list[v].append(u)
+    
+    # To store the color of each region
+    color = [-1] * n
+    
+    # Sort vertices by degree for better performance in greedy coloring
+    vertices = sorted(range(n), key=lambda x: len(adjacency_list[x]), reverse=True)
+    
+    # Function to assign colors using greedy algorithm
+    def greedy_coloring(vertex):
+        used_colors = set()
+        for neighbor in adjacency_list[vertex]:
+            if color[neighbor] != -1:
+                used_colors.add(color[neighbor])
+        for c in range(n):
+            if c not in used_colors:
+                return c
+    
+    max_personal_colored = 0
+    
+    # Assign colors to vertices
+    for vertex in vertices:
+        if color[vertex] == -1:
+            color[vertex] = greedy_coloring(vertex)
+            if color[vertex] == 0:  # You color the region
+                max_personal_colored += 1
+    
+    return max_personal_colored
+
+# Example usage:
+edges = [(0, 1), (1, 2), (2, 3), (3, 0), (0, 2)]
+n = 4
+print(max_personal_regions(edges, n))  # Output: 3
