@@ -1,0 +1,60 @@
+def solve_n_queens(n):
+    def is_safe(board, row, col):
+        # Check if there's a queen in the same column
+        for i in range(row):
+            if board[i][col] == 'Q':
+                return False
+        
+        # Check upper-left diagonal
+        for i, j in zip(range(row-1, -1, -1), range(col-1, -1, -1)):
+            if board[i][j] == 'Q':
+                return False
+        
+        # Check upper-right diagonal
+        for i, j in zip(range(row-1, -1, -1), range(col+1, n)):
+            if board[i][j] == 'Q':
+                return False
+        
+        return True
+    
+    def backtrack(board, row):
+        if row == n:
+            # Convert board to list of strings
+            solution = [''.join(row) for row in board]
+            solutions.append(solution)
+            return
+        
+        for col in range(n):
+            if is_safe(board, row, col):
+                board[row][col] = 'Q'
+                backtrack(board, row + 1)
+                board[row][col] = '.'
+    
+    # Initialize empty board
+    board = [['.' for _ in range(n)] for _ in range(n)]
+    solutions = []
+    backtrack(board, 0)
+    return solutions
+
+def print_board(board):
+    for row in board:
+        print(' '.join(row))
+    print()
+
+def visualize_n_queens(n):
+    solutions = solve_n_queens(n)
+    count = 1
+    for solution in solutions:
+        print(f"Solution {count}:")
+        print_board(solution)
+        count += 1
+
+# Examples
+print("Visualization for 4-Queens:")
+visualize_n_queens(4)
+
+print("Visualization for 5-Queens:")
+visualize_n_queens(5)
+
+print("Visualization for 8-Queens:")
+visualize_n_queens(8)
